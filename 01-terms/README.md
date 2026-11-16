@@ -53,3 +53,7 @@ Using the `math` module, find:
 
 A **module**: it's a single unit you import. A library like NumPy is a whole collection of modules.
 </details>
+
+## Go deeper
+
+OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §2.1 The Python shell, §2.6 The math module, §2.7 Formatting code.

@@ -67,3 +67,7 @@ Second number: 4
 
 `<class 'str'>`. `input()` always returns a string.
 </details>
+
+## Go deeper
+
+OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §2.2 Type conversion, §2.3 Mixed data types.

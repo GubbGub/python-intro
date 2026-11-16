@@ -103,3 +103,7 @@ Hint: `.split()` turns the name into a list of words; `[0]` gets the first one.
 
 Still `" hi "`. Strings are immutable, and `.strip()` returned a new string that you didn't store. You need `s = s.strip()`.
 </details>
+
+## Go deeper
+
+OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §1.4 String basics.

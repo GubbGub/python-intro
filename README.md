@@ -24,6 +24,10 @@ Every lesson follows one rule: **one idea, one example, one exercise.** Read the
 | 11 | Files & modules: `open()`, `import`, your own `.py` files | | coming soon |
 | 12 | Final project | | coming soon |
 
+## Companion textbook
+
+**[Introduction to Python Programming](https://openstax.org/details/books/introduction-python-programming)** from OpenStax is free and open, and it's the textbook my dual-enrollment Python course was taught from. It goes deeper than these lessons, and its built-in code runner lets you practice in the browser. Each lesson here ends with the matching sections to read.
+
 ## How to use this
 
 1. Do [Lesson 0](00-setup/) to install Python and VS Code.
@@ -51,4 +55,4 @@ python 02-strings/example.py      # on Windows you can also use: py 02-strings/e
 01-terms/ ...
 ```
 
-Made by [Jared Bridgewater](https://gubbgub.github.io).
+Made by [Jared Bridgewater](https://gubbgub.github.io). Textbook: *Introduction to Python Programming*, OpenStax, Rice University, CC BY 4.0, access for free at [openstax.org](https://openstax.org/details/books/introduction-python-programming).

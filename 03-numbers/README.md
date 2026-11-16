@@ -70,3 +70,7 @@ A movie is `135` minutes long. Use `//` and `%` to print it as hours and minutes
 
 `n % 2 == 0`: even numbers leave no remainder when you divide by 2.
 </details>
+
+## Go deeper
+
+OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §1.5 Number basics, §2.5 Dividing integers, §2.6 The math module.

@@ -53,3 +53,7 @@ In `exercise.py`, print three lines: your name, the city you live in, and one th
 
 VS Code is where you **write** code. The interpreter is the program that **runs** it. You could write Python in Notepad and it would still run, because the interpreter is what matters.
 </details>
+
+## Go deeper
+
+OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §1.1 Background, §1.8 Why Python?.
