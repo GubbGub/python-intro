@@ -56,4 +56,4 @@ VS Code is where you **write** code. The interpreter is the program that **runs*
 
 ## Go deeper
 
-OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §1.1 Background, §1.8 Why Python?.
+OpenStax, [*Introduction to Python Programming*](https://openstax.org/details/books/introduction-python-programming): §1.1 Background, §1.8 Why Python?

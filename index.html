@@ -166,6 +166,9 @@ details[open] > summary .chev { transform: rotate(90deg); }
 .btn:hover { text-decoration: none; filter: brightness(.97); }
 .btn.primary { background: var(--accent); color: var(--on-accent); }
 .btn code { font-family: var(--mono); font-size: 13px; }
+/* LEARN: the lesson text gives every inline <code> a gray pill. Inside a button that pill hid the label,
+   so this more specific rule (.body .btn code beats .body code) turns it off. */
+.body .btn code { background: none; padding: 0; color: inherit; }
 
 /* ---------- how to + textbook ---------- */
 .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
