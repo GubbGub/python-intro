@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!--
+  Python Intro
+  ============
+  A small, no-fluff introduction to Python, built from my own notes.
+  Every lesson: one idea, one example, one exercise.
+
+  FILES
+  index.html      layout, styling and behavior (this file)
+  lessons.js      every lesson's content, generated from the lesson READMEs by build.py
+  build.py        run `python build.py` after editing any README.md
+  00-setup/ ...   one folder per lesson: README.md, example.py, exercise.py, solution.py
+  publish.sh      rebuilds lessons.js, commits and pushes
+
+  PROGRESS
+  The checkmarks are saved in the visitor's own browser (localStorage), so each learner tracks their own.
+
+  Search for "LEARN:" to jump between the explanations.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Python Intro · Jared Bridgewater</title>
+  <meta name="description" content="A small, no-fluff introduction to Python. One idea, one example, one exercise per lesson.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <!-- LEARN: runs before the page draws so it never flashes the wrong theme. Same "theme" key as my logbook. -->
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("theme"); } catch (e) {}
+      var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    })();
+  </script>
+  <style>
+/* LEARN: every color is a variable, so dark mode only swaps the variables.
+   Each of my course pages gets one accent: 8.01 is MIT red, this one is Python blue. */
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --ink: #1D1D1F;
+  --ink-2: #6E6E73;
+  --ink-3: #8E8E93;
+  --sep: #E5E5EA;
+  --fill: #EDEDF0;
+  --code-bg: #F5F5F7;
+  --accent: #3776AB;           /* Python blue */
+  --on-accent: #FFFFFF;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --radius: 14px;
+  /* syntax colors */
+  --t-kw: #AD3DA4; --t-str: #C41A16; --t-num: #1C00CF; --t-com: #6E6E73; --t-fn: #326D74; --t-esc: #C2185B;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000; --card: #1C1C1E; --ink: #F5F5F7; --ink-2: #A1A1A6; --ink-3: #78787E;
+    --sep: #38383A; --fill: #2C2C2E; --code-bg: #111113; --accent: #6CA9E0; --on-accent: #001526; color-scheme: dark;
+    --t-kw: #FF7AB2; --t-str: #FF8170; --t-num: #D9C97C; --t-com: #7F8C98; --t-fn: #78C2B3; --t-esc: #FFA14F;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --card: #1C1C1E; --ink: #F5F5F7; --ink-2: #A1A1A6; --ink-3: #78787E;
+  --sep: #38383A; --fill: #2C2C2E; --code-bg: #111113; --accent: #6CA9E0; --on-accent: #001526; color-scheme: dark;
+  --t-kw: #FF7AB2; --t-str: #FF8170; --t-num: #D9C97C; --t-com: #7F8C98; --t-fn: #78C2B3; --t-esc: #FFA14F;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.47; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- top bar ---------- */
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; }
+.brand { color: var(--ink); font-weight: 600; font-size: 15px; }
+.brand span { color: var(--ink-3); font-weight: 400; margin-left: 8px; }
+.brand:hover { text-decoration: none; }
+.pill { font: inherit; font-size: 13px; color: var(--ink); background: var(--fill); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.pill svg { width: 14px; height: 14px; }
+:root[data-theme="dark"] .pill .to-dark, :root:not([data-theme="dark"]) .pill .to-light { display: none; }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 56px 8px; }
+.eyebrow { font-size: 14px; font-weight: 600; color: var(--accent); margin: 0 0 6px; }
+h1 { font-family: var(--display); font-size: clamp(40px, 7vw, 56px); line-height: 1.05; letter-spacing: -.025em; font-weight: 700; margin: 0 0 14px; }
+.lede { font-size: 19px; color: var(--ink-2); margin: 0; max-width: 34em; }
+.rule { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+.rule span { font-size: 13.5px; font-weight: 500; background: var(--card); border-radius: 999px; padding: 6px 14px; }
+.rule b { color: var(--accent); font-weight: 600; margin-right: 6px; font-variant-numeric: tabular-nums; }
+.progress { margin-top: 32px; }
+.progress-line { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--ink-2); margin-bottom: 8px; flex-wrap: wrap; }
+.progress-line b { color: var(--ink); font-weight: 600; }
+.track { height: 4px; border-radius: 999px; background: var(--fill); overflow: hidden; }
+.track i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .3s; }
+
+/* ---------- jump bar ---------- */
+.jump { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 4; margin-top: 40px; background: color-mix(in srgb, var(--bg) 85%, transparent); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--sep); }
+.jump .wrap { display: flex; gap: 6px; padding-block: 10px; overflow-x: auto; scrollbar-width: none; }
+.jump a { flex: none; font-size: 14px; color: var(--ink); background: var(--fill); border-radius: 999px; padding: 6px 14px; }
+.jump a:hover { text-decoration: none; filter: brightness(.96); }
+
+/* ---------- sections ---------- */
+section { padding-top: 48px; scroll-margin-top: 64px; }
+h2 { font-family: var(--display); font-size: 28px; letter-spacing: -.02em; font-weight: 700; margin: 0 0 4px; }
+.sub { color: var(--ink-2); font-size: 15px; margin: 0 0 18px; }
+
+/* LEARN: a "grouped list" is the iPhone Settings look: one rounded card, rows separated by thin lines. */
+.group { background: var(--card); border-radius: var(--radius); overflow: hidden; }
+
+/* ---------- lessons ---------- */
+/* LEARN: <details> + <summary> is a built-in dropdown: no JavaScript needed to open and close it. */
+details.lesson { border-top: 1px solid var(--sep); scroll-margin-top: 64px; }
+details.lesson:first-child { border-top: 0; }
+details.lesson > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 22px 34px minmax(0,1fr) auto 14px; gap: 12px; align-items: center; padding: 14px 16px; }
+details.lesson > summary::-webkit-details-marker { display: none; }
+.ln { font-size: 13.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.lt { font-weight: 500; min-width: 0; }
+.lm { font-size: 13.5px; color: var(--ink-3); white-space: nowrap; }
+.lesson.done .lt { color: var(--ink-3); }
+.chev { width: 14px; height: 14px; color: var(--ink-3); transition: transform .2s; }
+details[open] > summary .chev { transform: rotate(90deg); }
+
+/* LEARN: appearance:none removes the browser's checkbox so we can draw a round one, like Reminders. */
+.ck { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; margin: 0; border-radius: 50%; border: 1.5px solid var(--ink-3); background: transparent; cursor: pointer; }
+.ck:checked { background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 14px no-repeat; border-color: var(--accent); }
+
+.soon { display: grid; grid-template-columns: 22px 34px minmax(0,1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--sep); color: var(--ink-3); }
+.soon .dot { width: 22px; height: 22px; border-radius: 50%; border: 1.5px dashed var(--sep); }
+.soon code { font-size: .92em; }
+
+/* lesson body: the converted README */
+.body { background: var(--bg); padding: 8px 20px 24px; border-top: 1px solid var(--sep); font-size: 16px; }
+.body h2 { font-size: 20px; margin: 26px 0 8px; letter-spacing: -.01em; }
+.body h3 { font-size: 16.5px; margin: 22px 0 6px; }
+.body p, .body ul, .body ol { margin: 0 0 12px; }
+.body li { margin-bottom: 4px; }
+.body :not(pre) > code { font-family: var(--mono); font-size: .88em; background: var(--fill); border-radius: 6px; padding: 1px 6px; }
+.body table { border-collapse: collapse; width: 100%; background: var(--card); border-radius: 12px; overflow: hidden; margin: 6px 0 16px; font-size: 15px; }
+.body th, .body td { text-align: left; padding: 9px 14px; border-top: 1px solid var(--sep); vertical-align: top; }
+.body th { border-top: 0; font-size: 13px; color: var(--ink-3); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.body details { background: var(--card); border-radius: 12px; padding: 12px 16px; margin: 8px 0; }
+.body details summary { cursor: pointer; font-weight: 500; }
+.body details[open] summary { margin-bottom: 8px; }
+.body details p:last-child { margin-bottom: 0; }
+
+/* code blocks (classes come from Pygments, via build.py) */
+.hl { position: relative; margin: 6px 0 16px; }
+.hl pre { margin: 0; background: var(--code-bg); border: 1px solid var(--sep); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 14px; line-height: 1.55; }
+:root:not([data-theme="dark"]) .hl pre { background: var(--card); }
+.hl .k, .hl .kn, .hl .kc, .hl .ow { color: var(--t-kw); font-weight: 500; }
+.hl .s, .hl .s1, .hl .s2, .hl .sa, .hl .sd { color: var(--t-str); }
+.hl .se, .hl .si { color: var(--t-esc); }
+.hl .mi, .hl .mf, .hl .mh, .hl .il { color: var(--t-num); }
+.hl .c, .hl .c1, .hl .cm { color: var(--t-com); font-style: italic; }
+.hl .nb, .hl .bp, .hl .nf { color: var(--t-fn); }
+.copy { position: absolute; top: 8px; right: 8px; font: inherit; font-size: 12px; color: var(--ink-2); background: var(--fill); border: 0; border-radius: 999px; padding: 4px 10px; cursor: pointer; opacity: 0; transition: opacity .15s; }
+.hl:hover .copy, .copy:focus-visible { opacity: 1; }
+
+.files { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--sep); }
+.btn { font: inherit; font-size: 14px; font-weight: 500; border-radius: 999px; padding: 7px 16px; border: 0; background: var(--fill); color: var(--ink); display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { text-decoration: none; filter: brightness(.97); }
+.btn.primary { background: var(--accent); color: var(--on-accent); }
+.btn code { font-family: var(--mono); font-size: 13px; }
+
+/* ---------- how to + textbook ---------- */
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 12px; padding: 12px 16px; border-top: 1px solid var(--sep); font-size: 15.5px; }
+.steps li:first-child { border-top: 0; }
+.steps li::before { content: counter(s); font-size: 13.5px; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.steps code { font-family: var(--mono); font-size: .9em; background: var(--fill); border-radius: 6px; padding: 1px 6px; }
+.book { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 18px 16px; }
+.book .k { font-size: 13px; color: var(--ink-3); }
+.book h3 { margin: 2px 0 4px; font-size: 18px; }
+.book p { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+
+footer { padding-block: 56px 48px; font-size: 13.5px; color: var(--ink-3); }
+footer p { margin: 0 0 4px; }
+
+@media (max-width: 560px) {
+  details.lesson > summary { grid-template-columns: 22px 28px minmax(0,1fr) 14px; }
+  details.lesson > summary .lm { display: none; }
+  .book { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="https://gubbgub.github.io">Jared Bridgewater<span>Python Intro</span></a>
+      <button class="pill" id="theme" type="button" aria-label="Toggle dark mode">
+        <svg class="to-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="to-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <span class="to-dark">Dark</span><span class="to-light">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <p class="eyebrow">Course · work in progress</p>
+      <h1>Python Intro</h1>
+      <p class="lede">A small, no-fluff introduction to Python, built from my own study notes. Read the idea, run the example, then close it and write the exercise yourself before you peek at the solution.</p>
+      <div class="rule"><span><b>1</b>idea</span><span><b>1</b>example</span><span><b>1</b>exercise</span></div>
+      <div class="progress">
+        <div class="progress-line"><span><b id="done-count">0</b> of <span id="total-count">0</span> lessons done</span><span id="time-left"></span></div>
+        <div class="track"><i id="bar"></i></div>
+      </div>
+    </div>
+
+    <nav class="jump" aria-label="Sections">
+      <div class="wrap"><a href="#lessons">Lessons</a><a href="#start">How to use it</a><a href="#textbook">Textbook</a></div>
+    </nav>
+
+    <div class="wrap">
+      <section id="lessons">
+        <h2>Lessons</h2>
+        <p class="sub">Tap a lesson to open it. Check it off when you've done the exercise; your progress stays in this browser.</p>
+        <div class="group" id="lesson-list"></div>
+      </section>
+
+      <section id="start">
+        <h2>How to use it</h2>
+        <p class="sub">Every lesson's code also lives in the repo, ready to run.</p>
+        <ol class="group steps">
+          <li><span>Do <a href="#00-setup">Lesson 0</a> to install Python and VS Code.</span></li>
+          <li><span>Download the code from <a href="https://github.com/GubbGub/python-intro">GitHub</a> (<b>Code → Download ZIP</b>) and open the folder in VS Code.</span></li>
+          <li><span>For each lesson: read it here, run <code>example.py</code>, write your answer in <code>exercise.py</code>, and only then compare with <code>solution.py</code>.</span></li>
+          <li><span>Run a file from the VS Code terminal with <code>python 02-strings/example.py</code> (on Windows, <code>py</code> works too).</span></li>
+        </ol>
+      </section>
+
+      <section id="textbook">
+        <h2>Textbook</h2>
+        <p class="sub">The free textbook my dual-enrollment Python course was taught from. Each lesson ends with the sections to read next.</p>
+        <div class="group book">
+          <div>
+            <span class="k">OpenStax · Rice University · free</span>
+            <h3>Introduction to Python Programming</h3>
+            <p>Goes deeper than these lessons, with a code runner that lets you practice right in the browser.</p>
+          </div>
+          <a class="btn primary" href="https://openstax.org/details/books/introduction-python-programming">Open the book</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>Made by <a href="https://gubbgub.github.io">Jared Bridgewater</a>. Code on <a href="https://github.com/GubbGub/python-intro">GitHub</a>.</p>
+      <p>Textbook: <em>Introduction to Python Programming</em>, OpenStax, Rice University. Access for free at openstax.org.</p>
+    </div>
+  </footer>
+
+  <script src="lessons.js"></script>
+  <script>
+  (function () {
+    var KEY = "python-intro:done";
+    var LESSONS = window.LESSONS || [], UPCOMING = window.UPCOMING || [];
+    var chev = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+    // LEARN: localStorage can throw (private mode, blocked storage), so every read and write is wrapped.
+    function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+    function save(list) { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} }
+    var done = load();
+
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+    // ---- build the list
+    var list = document.getElementById("lesson-list");
+    var html = "";
+    LESSONS.forEach(function (l) {
+      var files = l.files.map(function (f) {
+        return '<a class="btn' + (f.name === "exercise.py" ? " primary" : "") + '" href="' + esc(f.url) + '"><code>' + esc(f.name) + "</code></a>";
+      }).join("");
+      html +=
+        '<details class="lesson" id="' + esc(l.slug) + '" data-slug="' + esc(l.slug) + '">' +
+          "<summary>" +
+            '<input class="ck" type="checkbox" aria-label="Mark lesson ' + l.num + ' done">' +
+            '<span class="ln">' + pad(l.num) + "</span>" +
+            '<span class="lt">' + esc(l.title) + "</span>" +
+            '<span class="lm">' + esc(l.time) + "</span>" + chev +
+          "</summary>" +
+          '<div class="body">' + l.html + '<div class="files">' + files + "</div></div>" +
+        "</details>";
+    });
+    UPCOMING.forEach(function (u) {
+      // u.title is built by build.py from my own README, so it's trusted HTML (it holds <code> tags).
+      html += '<div class="soon"><span class="dot"></span><span class="ln">' + pad(u.num) + "</span><span>" + u.title + '</span><span class="lm">soon</span></div>';
+    });
+    list.innerHTML = html;
+
+    // ---- progress
+    function refresh() {
+      var count = 0, minsLeft = 0;
+      list.querySelectorAll("details.lesson").forEach(function (d, i) {
+        var isDone = done.indexOf(d.dataset.slug) !== -1;
+        d.classList.toggle("done", isDone);
+        d.querySelector(".ck").checked = isDone;
+        if (isDone) count++; else minsLeft += parseInt(LESSONS[i].time, 10) || parseInt(LESSONS[i].time.replace("~", ""), 10) || 0;
+      });
+      document.getElementById("done-count").textContent = count;
+      document.getElementById("total-count").textContent = LESSONS.length;
+      document.getElementById("bar").style.width = (LESSONS.length ? (100 * count / LESSONS.length) : 0) + "%";
+      document.getElementById("time-left").textContent = minsLeft ? "about " + minsLeft + " min left" : (count ? "all caught up" : "");
+    }
+    list.addEventListener("click", function (e) {
+      // LEARN: clicking the checkbox shouldn't also open or close the lesson, so stop the click there.
+      if (!e.target.classList.contains("ck")) return;
+      e.stopPropagation();
+      var slug = e.target.closest("details").dataset.slug;
+      var i = done.indexOf(slug);
+      if (e.target.checked && i === -1) done.push(slug);
+      if (!e.target.checked && i !== -1) done.splice(i, 1);
+      save(done); refresh();
+    });
+    refresh();
+
+    // ---- copy buttons on every code block
+    list.querySelectorAll(".hl").forEach(function (block) {
+      var b = document.createElement("button");
+      b.className = "copy"; b.type = "button"; b.textContent = "Copy";
+      b.addEventListener("click", function () {
+        var text = block.querySelector("pre").innerText;
+        (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(
+          function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1200); },
+          function () { b.textContent = "Select and copy"; });
+      });
+      block.appendChild(b);
+    });
+
+    // ---- open a lesson from the address bar (#02-strings) and from in-page links
+    function openFromHash() {
+      var el = location.hash && document.getElementById(location.hash.slice(1));
+      if (el && el.tagName === "DETAILS") { el.open = true; el.scrollIntoView({ block: "start" }); }
+    }
+    window.addEventListener("hashchange", openFromHash);
+    openFromHash();
+
+    // ---- theme toggle (same "theme" key as my logbook and 8.01 page)
+    document.getElementById("theme").addEventListener("click", function () {
+      var dark = document.documentElement.getAttribute("data-theme") !== "dark";
+      document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+      try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch (e) {}
+    });
+  })();
+  </script>
+</body>
+</html>
