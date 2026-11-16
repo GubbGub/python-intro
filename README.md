@@ -55,4 +55,4 @@ python 02-strings/example.py      # on Windows you can also use: py 02-strings/e
 01-terms/ ...
 ```
 
-Made by [Jared Bridgewater](https://gubbgub.github.io). Textbook: *Introduction to Python Programming*, OpenStax, Rice University, CC BY 4.0, access for free at [openstax.org](https://openstax.org/details/books/introduction-python-programming).
+Made by [Jared Bridgewater](https://gubbgub.github.io). Textbook: *Introduction to Python Programming*, OpenStax, Rice University. Access for free at [openstax.org](https://openstax.org/details/books/introduction-python-programming).
