@@ -335,6 +335,13 @@ footer p { margin: 0 0 4px; }
       block.appendChild(b);
     });
 
+    // ---- links to other sites open in a new tab
+    // LEARN: rel="noopener" stops the new tab from being able to control this one.
+    document.querySelectorAll('a[href^="http"]').forEach(function (a) {
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    });
+
     // ---- open a lesson from the address bar (#02-strings) and from in-page links
     function openFromHash() {
       var el = location.hash && document.getElementById(location.hash.slice(1));
